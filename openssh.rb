@@ -15,11 +15,19 @@ class Openssh < Formula
   # Please don't resubmit the keychain patch option. It will never be accepted.
   # https://github.com/Homebrew/homebrew-dupes/pull/482#issuecomment-118994372
   option "with-libressl", "Build with LibreSSL instead of OpenSSL"
+  option "with-gsskex", "Add GSSAPI key exchange support"
 
   depends_on "openssl" => :recommended
   depends_on "libressl" => :optional
   depends_on "ldns" => :optional
   depends_on "pkg-config" => :build if build.with? "ldns"
+
+  if build.with? "gsskex"
+    patch do
+      url "https://trac.macports.org/export/146143/trunk/dports/net/openssh/files/openssh-7.2p1-gsskex-all-20141021-mp-20160301.patch"
+      sha256 '9b7b23f1a74275e0663547e0479b1e3f577ffe52d9a963e43f4e2f676074d8b0'
+    end
+  end
 
   if OS.mac?
     # Both these patches are applied by Apple.
